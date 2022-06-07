@@ -4,25 +4,32 @@ using System.Collections;
 
 public class Remover : MonoBehaviour
 {
-    //public GameObject splash;
-
-
+   public GameObject splash;
+    private void Update()
+    {
+        //if(GameObject.Find("hero").GetComponent<PlayerHealth>().health <= 0)
+        {
+          //  GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>().enabled = false;
+            
+           // StartCoroutine("ReloadGame");
+        }
+    }
     void OnTriggerEnter2D(Collider2D col)
     {
 
         if (col.gameObject.tag == "Player")
         {
 
-            //GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>().enabled = false;
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>().enabled = false;
 
-            //防止英雄销毁后再去获取位置出现NullReferenceException
+            //**防止英雄销毁后再去获取位置出现NullReferenceException
             if (GameObject.Find("UI_HealthBar").activeSelf)
             {
-                GameObject.Find("UI_HealthBar").SetActive(false);
+               GameObject.Find("UI_HealthBar").SetActive(false);
             }
 
 
-            //Instantiate(splash, col.transform.position, transform.rotation);
+            Instantiate(splash, col.transform.position, transform.rotation);
 
             Destroy(col.gameObject);
 
@@ -32,7 +39,7 @@ public class Remover : MonoBehaviour
         else
         {
 
-            //Instantiate(splash, col.transform.position, transform.rotation);
+            Instantiate(splash, col.transform.position, transform.rotation);
 
 
             Destroy(col.gameObject);

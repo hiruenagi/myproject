@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
     public float repeatDamagePeriod = 2f;
     public float hurtForce = 10f;
     public float damageAmount = 10f;
+    public AudioClip[] ouch;
 
     private float lastHitTime;
     private Vector3 healthScale;
@@ -26,6 +28,8 @@ public class PlayerHealth : MonoBehaviour
     {
         if (col.gameObject.tag == "Enemy")
         {
+            int i = UnityEngine.Random.Range(0, ouch.Length);
+            AudioSource.PlayClipAtPoint(ouch[i], transform.position);//播放声音
             //可以再次减血
             if (Time.time > lastHitTime + repeatDamagePeriod)
             {
@@ -60,20 +64,23 @@ public class PlayerHealth : MonoBehaviour
         //销毁血条
         GameObject go = GameObject.Find("UI_HealthBar");
         Destroy(go);
+        StartCoroutine("ReloadGame");
     }
     void TakeDamage(Transform enemy)
     {
         playerControl.bJump = false;
-        Vector3 hurtVector = transform.position - enemy.position + Vector3.up * 5f;
+        Vector3 hurtVector = transform.position - enemy.position + Vector3.up * 6f;
         GetComponent<Rigidbody2D>().AddForce(hurtVector * hurtForce);
         health -= damageAmount;
         if (health <= 0)
         {
             death();
-            // return;
+             return;
         }
 
         UpdateHealthBar();
+        int i = Random.Range(0, ouch.Length);
+        AudioSource.PlayClipAtPoint(ouch[i], transform.position);
     }
 
     public void UpdateHealthBar()
@@ -81,5 +88,12 @@ public class PlayerHealth : MonoBehaviour
         healthBar.material.color = Color.Lerp(Color.green, Color.red, 1 - health * 0.01f);
         healthBar.transform.localScale = new Vector3(healthScale.x * health * 0.01f, 1, 1);
     }
+    IEnumerator ReloadGame()
+    {
 
+        yield return new WaitForSeconds(2);
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+    }
 }
+

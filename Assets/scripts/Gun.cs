@@ -7,12 +7,12 @@ public class Gun : MonoBehaviour
     public GameObject rocket;
     public float speed = 20f;
     PlayerCtrl playerCtrl;
-    public AudioSource audios;
+    //public AudioSource audios;
     // Start is called before the first frame update
     void Start()
     {
         playerCtrl = transform.root.GetComponent<PlayerCtrl>();
-        audios = this.GetComponent<AudioSource>();
+        //audios = this.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -20,7 +20,7 @@ public class Gun : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1"))
         {
-            audios.Play();
+            //audios.Play();
             if (playerCtrl.bFaceRight)
             {
                 GameObject bulletInstance = Instantiate(rocket, transform.position, Quaternion.Euler(0, 0, 0));
